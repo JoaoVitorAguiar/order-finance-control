@@ -53,6 +53,9 @@ public class OrderFinanceControlDbContext : DbContext
             entity.Property(p => p.Price)
                 .HasColumnType("decimal(18,2)")
                 .IsRequired();
+
+            entity.HasIndex(p => p.Name)
+                .IsUnique();
         });
 
         // ========================

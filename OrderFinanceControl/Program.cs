@@ -14,13 +14,16 @@ builder.Services
     .AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
+builder.Services.AddScoped<ICustomerRepository, CustomerSqlRepository>();
+builder.Services.AddScoped<IProductRepository, ProductSqlRepository>();
+
 builder.Services.AddScoped<CreateCustomerUseCase>();
+builder.Services.AddScoped<CreateProductUseCase>();
 
 
 builder.Services.AddDbContext<OrderFinanceControlDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<ICustomerRepository, CustomerSqlRepository>();
 
 var app = builder.Build();
 app.MapControllers();
