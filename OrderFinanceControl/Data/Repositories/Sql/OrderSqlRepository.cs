@@ -72,6 +72,11 @@ public class OrderSqlRepository(OrderFinanceControlDbContext dbContext) : IOrder
             .FirstOrDefaultAsync(o => o.Id == id);
     }
 
+    public Task<Order?> GetEntityByIdAsync(int id)
+    {
+        return _dbContext.Orders.FirstOrDefaultAsync(o => o.Id == id);
+    }
+
     public Task SaveChangesAsync()
     {
         return _dbContext.SaveChangesAsync();

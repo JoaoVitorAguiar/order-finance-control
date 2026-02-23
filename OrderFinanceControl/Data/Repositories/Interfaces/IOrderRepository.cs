@@ -7,6 +7,7 @@ public interface IOrderRepository
 {
     Task<IEnumerable<OrderResponseDto>> GetAllAsync();
     Task<OrderResponseDto?> GetByIdAsync(int id);
+    Task<Order?> GetEntityByIdAsync(int id);
     Task AddAsync(Order order);
     Task SaveChangesAsync();
 }

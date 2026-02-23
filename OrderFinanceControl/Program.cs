@@ -21,6 +21,7 @@ builder.Services.AddScoped<IOrderRepository, OrderSqlRepository>();
 builder.Services.AddScoped<CreateCustomerUseCase>();
 builder.Services.AddScoped<CreateProductUseCase>();
 builder.Services.AddScoped<CreateOrderUseCase>();
+builder.Services.AddScoped<MarkOrderAsPaidUseCase>();
 
 
 builder.Services.AddDbContext<OrderFinanceControlDbContext>(options =>

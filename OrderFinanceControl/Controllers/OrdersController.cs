@@ -12,10 +12,15 @@ public class OrdersController : ControllerBase
 {
     private readonly CreateOrderUseCase _createOrderUseCase;
     private readonly IOrderRepository _orderRepository;
-    public OrdersController(CreateOrderUseCase createOrderUseCase, IOrderRepository orderRepository)
+    private readonly MarkOrderAsPaidUseCase _markOrderAsPaidUseCase;
+    public OrdersController(
+        CreateOrderUseCase createOrderUseCase, 
+        IOrderRepository orderRepository,
+        MarkOrderAsPaidUseCase markOrderAsPaidUseCase)
     {
         _createOrderUseCase = createOrderUseCase;
         _orderRepository = orderRepository;
+        _markOrderAsPaidUseCase = markOrderAsPaidUseCase;
     }
 
     [HttpPost]
@@ -46,5 +51,12 @@ public class OrdersController : ControllerBase
         var orders = await _orderRepository.GetAllAsync();
 
         return Ok(orders);
+    }
+
+    [HttpPatch("{id}/pay")]
+    public async Task<IActionResult> MarkAsPaid(int id)
+    {
+        await _markOrderAsPaidUseCase.ExecuteAsync(id);
+        return NoContent();
     }
 }

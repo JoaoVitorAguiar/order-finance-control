@@ -26,6 +26,12 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
                 ex.Message,
                 context),
 
+            ConflictException ex => CreateProblem(
+                StatusCodes.Status409Conflict,
+                "Conflict",
+                ex.Message,
+                context),
+
             _ => CreateProblem(
                 StatusCodes.Status500InternalServerError,
                 "Internal server error",
