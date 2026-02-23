@@ -2,7 +2,7 @@
 
 public class Customer(string name, string email)
 {
-    public int Id { get; set; }
+    public string Id { get; set; } = default!;
     public string Name { get; set; } = name;
     public string Email { get; set; } = email;
 }

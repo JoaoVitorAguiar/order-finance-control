@@ -1,23 +1,18 @@
 ﻿using OrderFinanceControl.Enums;
+using System.Text.Json.Serialization;
 
 namespace OrderFinanceControl.Entities;
 
-public class Order
+public class Order(Customer customer, IEnumerable<OrderItem> items)
 {
-    private Order() { }
-    public Order(int customerId, ICollection<OrderItem> items)
-    {
-        CustomerId = customerId;
-        Items = items;
-        TotalAmount = items.Sum(i => i.Quantity * i.UnitPriceAtOrderTime);
-    }
-
-    public int Id { get; set; }
-    public int CustomerId { get; set; }
-    public Customer Customer { get; set; } 
+    public string Id { get; set; } = default!;
+    public Customer Customer { get; set; } = customer;
+    public List<OrderItem> Items { get; set; } = items.ToList();
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public decimal TotalAmount { get; set; }
+    public decimal TotalAmount =>
+        Items.Sum(i => i.Quantity * i.UnitPrice);
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+
     public OrderStatus Status { get; set; } = OrderStatus.Created;
     public DateTime? PaidAt { get; set; }
-    public ICollection<OrderItem> Items { get; set; }
 }

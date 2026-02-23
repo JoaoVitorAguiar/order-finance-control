@@ -13,9 +13,9 @@ public class MarkOrderAsPaidUseCase
         _orderRepository = orderRepository;
     }
 
-    public async Task ExecuteAsync(int orderId)
+    public async Task ExecuteAsync(string orderId)
     {
-        var order = await _orderRepository.GetEntityByIdAsync(orderId);
+        var order = await _orderRepository.GetByIdAsync(orderId);
 
         if (order == null)
             throw new NotFoundException("Order not found.");
@@ -26,6 +26,6 @@ public class MarkOrderAsPaidUseCase
         order.Status = OrderStatus.Paid;
         order.PaidAt = DateTime.UtcNow;
 
-        await _orderRepository.SaveChangesAsync();
+        await _orderRepository.UpdateAsync(order);
     }
 }

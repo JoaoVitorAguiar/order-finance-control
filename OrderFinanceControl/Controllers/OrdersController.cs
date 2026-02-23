@@ -35,7 +35,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    public async Task<IActionResult> GetById(string id)
     {
         var order = await _orderRepository.GetByIdAsync(id);
 
@@ -54,7 +54,7 @@ public class OrdersController : ControllerBase
     }
 
     [HttpPatch("{id}/pay")]
-    public async Task<IActionResult> MarkAsPaid(int id)
+    public async Task<IActionResult> MarkAsPaid(string id)
     {
         await _markOrderAsPaidUseCase.ExecuteAsync(id);
         return NoContent();

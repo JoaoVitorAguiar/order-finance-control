@@ -3,11 +3,10 @@ using OrderFinanceControl.Entities;
 
 namespace OrderFinanceControl.Data.Repositories.Interfaces;
 
-public interface IOrderRepository
+public interface IOrderRepository  
 {
-    Task<IEnumerable<OrderResponseDto>> GetAllAsync();
-    Task<OrderResponseDto?> GetByIdAsync(int id);
-    Task<Order?> GetEntityByIdAsync(int id);
+    Task<IEnumerable<Order>> GetAllAsync();
+    Task<Order?> GetByIdAsync(string id);
     Task AddAsync(Order order);
-    Task SaveChangesAsync();
+    Task UpdateAsync(Order order);
 }

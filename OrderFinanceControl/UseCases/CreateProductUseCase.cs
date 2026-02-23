@@ -17,6 +17,5 @@ public class CreateProductUseCase(IProductRepository productRepository)
         }
         var product = new Product(productDto.Name, productDto.Price);
         await _productRepository.AddAsync(product);
-        await _productRepository.SaveChangesAsync();
     }
 }

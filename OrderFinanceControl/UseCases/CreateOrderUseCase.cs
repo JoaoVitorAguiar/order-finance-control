@@ -21,10 +21,11 @@ public class CreateOrderUseCase
         _productRepository = productRepository;
     }
 
-    public async Task<int> ExecuteAsync(OrderDto dto)
+    public async Task<string> ExecuteAsync(OrderDto dto)
     {
-        var customerExists = await _customerRepository.GetByIdAsync(dto.CustomerId);
-        if (customerExists == null)
+        var customer = await _customerRepository.GetByIdAsync(dto.CustomerId);
+
+        if (customer == null)
             throw new NotFoundException("Customer not found.");
 
         var productIds = dto.Items.Select(i => i.ProductId).Distinct();
@@ -36,16 +37,22 @@ public class CreateOrderUseCase
         var productsDict = products.ToDictionary(p => p.Id);
 
         var items = dto.Items
-            .Select(i => new OrderItem(
-                i.ProductId,
-                productsDict[i.ProductId].Price,
-                i.Quantity))
+            .Select(i =>
+            {
+                var product = productsDict[i.ProductId];
+
+                return new OrderItem(
+                    product.Id,
+                    product.Name,
+                    product.Price,
+                    i.Quantity
+                );
+            })
             .ToList();
 
-        var order = new Order(dto.CustomerId, items);
+        var order = new Order(customer, items);
 
         await _orderRepository.AddAsync(order);
-        await _orderRepository.SaveChangesAsync();
 
         return order.Id;
     }
