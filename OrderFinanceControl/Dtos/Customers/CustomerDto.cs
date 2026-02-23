@@ -3,7 +3,7 @@
 namespace OrderFinanceControl.Dtos.Customers;
 
 
-public class CustomerDto
+public record CustomerDto
 {
     [Required]
     [MaxLength(150)]

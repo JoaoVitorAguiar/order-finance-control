@@ -16,9 +16,11 @@ builder.Services.AddProblemDetails();
 
 builder.Services.AddScoped<ICustomerRepository, CustomerSqlRepository>();
 builder.Services.AddScoped<IProductRepository, ProductSqlRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderSqlRepository>();
 
 builder.Services.AddScoped<CreateCustomerUseCase>();
 builder.Services.AddScoped<CreateProductUseCase>();
+builder.Services.AddScoped<CreateOrderUseCase>();
 
 
 builder.Services.AddDbContext<OrderFinanceControlDbContext>(options =>

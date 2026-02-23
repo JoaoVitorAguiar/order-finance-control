@@ -21,6 +21,13 @@ public class ProductSqlRepository(OrderFinanceControlDbContext context) : IProdu
             .ToListAsync();
     }
 
+    public async Task<IEnumerable<Product>> GetByIdsAsync(IEnumerable<int> ids)
+    {
+        return await _context.Products
+            .Where(p => ids.Contains(p.Id))
+            .ToListAsync();
+    }
+
     public async Task<Product?> GetByNameAsync(string name)
     {
         return await _context

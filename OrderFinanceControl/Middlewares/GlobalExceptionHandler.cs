@@ -14,6 +14,11 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
 
         var problem = exception switch
         {
+            NotFoundException ex => CreateProblem(
+                StatusCodes.Status404NotFound,
+                "Resource not found",
+                ex.Message,
+                context),
 
             AlreadyExistsException ex => CreateProblem(
                 StatusCodes.Status409Conflict,

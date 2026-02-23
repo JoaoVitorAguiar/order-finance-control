@@ -6,7 +6,7 @@ using OrderFinanceControl.UseCases;
 namespace OrderFinanceControl.Controllers;
 
 [ApiController]
-[Route("products")]
+[Route("[controller]")]
 public class ProductController : ControllerBase
 {
     private readonly CreateProductUseCase _createProductUseCase;

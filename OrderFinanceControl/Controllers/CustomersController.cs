@@ -7,7 +7,7 @@ using OrderFinanceControl.UseCases;
 namespace OrderFinanceControl.Controllers;
 
 [ApiController]
-[Route("customers")]
+[Route("[controller]")]
 public class CustomersController : ControllerBase
 {
     private readonly ICustomerRepository _customerRepository;

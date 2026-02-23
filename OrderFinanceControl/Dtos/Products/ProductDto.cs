@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
 namespace OrderFinanceControl.Dtos.Products;
-public class ProductDto
+public record ProductDto
 {
     [Required]
     [MaxLength(150)]

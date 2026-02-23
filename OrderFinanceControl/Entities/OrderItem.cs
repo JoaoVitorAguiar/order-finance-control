@@ -2,6 +2,14 @@
 
 public class OrderItem
 {
+    public OrderItem() { }
+    public OrderItem(int productId, decimal unitPriceAtOrderTime, int quantity)
+    {
+        ProductId = productId;
+        UnitPriceAtOrderTime = unitPriceAtOrderTime;
+        Quantity = quantity;
+    }
+
     public int Id { get; set; }
     public int OrderId { get; set; }
     public Order Order { get; set; } 
