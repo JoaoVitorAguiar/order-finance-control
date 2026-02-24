@@ -3,7 +3,7 @@ using MongoDB.Driver;
 using OrderFinanceControl.Entities;
 using OrderFinanceControl.Settings;
 
-namespace OrderFinanceControl.Data.Repositories.Mongo;
+namespace OrderFinanceControl.Data;
 
 public class MongoContext
 {

@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.IdGenerators;
 using OrderFinanceControl.Entities;
 
-namespace OrderFinanceControl.Data.Repositories.Mongo.Configurations;
+namespace OrderFinanceControl.Data.Configurations;
 
 public static class CustomerMongoConfig
 {

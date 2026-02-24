@@ -1,4 +1,4 @@
-﻿namespace OrderFinanceControl.Data.Repositories.Mongo.Configurations;
+﻿namespace OrderFinanceControl.Data.Configurations;
 
 public static class MongoMappings
 {

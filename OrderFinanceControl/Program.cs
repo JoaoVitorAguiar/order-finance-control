@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using OrderFinanceControl.Data;
+using OrderFinanceControl.Data.Configurations;
 using OrderFinanceControl.Data.Repositories.Interfaces;
 using OrderFinanceControl.Data.Repositories.Mongo;
-using OrderFinanceControl.Data.Repositories.Mongo.Configurations;
 using OrderFinanceControl.Middlewares;
 using OrderFinanceControl.Settings;
 using OrderFinanceControl.UseCases;

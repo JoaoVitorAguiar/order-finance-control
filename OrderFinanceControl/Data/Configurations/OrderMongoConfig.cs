@@ -5,7 +5,7 @@ using MongoDB.Bson.Serialization.Serializers;
 using OrderFinanceControl.Entities;
 using OrderFinanceControl.Enums;
 
-namespace OrderFinanceControl.Data.Repositories.Mongo.Configurations;
+namespace OrderFinanceControl.Data.Configurations;
 
 public static class OrderMongoConfig
 {
