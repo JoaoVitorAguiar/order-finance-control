@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OrderFinanceControl.Data.Repositories.Interfaces;
 using OrderFinanceControl.Dtos.Products;
-using OrderFinanceControl.UseCases;
+using OrderFinanceControl.UseCases.Products;
 
 namespace OrderFinanceControl.Controllers;
 
@@ -10,11 +10,11 @@ namespace OrderFinanceControl.Controllers;
 public class ProductController : ControllerBase
 {
     private readonly CreateProductUseCase _createProductUseCase;
-    private readonly IProductRepository _productRepository;
-    public ProductController(CreateProductUseCase createProductUseCase, IProductRepository productRepository)
+    private readonly GetProductsUseCase _getProductsUseCase;
+    public ProductController(CreateProductUseCase createProductUseCase, GetProductsUseCase getProductsUseCase)
     {
         _createProductUseCase = createProductUseCase;
-        _productRepository = productRepository;
+        _getProductsUseCase = getProductsUseCase;
     }
 
     [HttpPost]
@@ -27,7 +27,7 @@ public class ProductController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var products = await _productRepository.GetAllAsync();
+        var products = await _getProductsUseCase.ExecuteAsync();
         return Ok(products);
     }
 }

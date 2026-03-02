@@ -2,7 +2,7 @@
 using OrderFinanceControl.Data.Repositories.Interfaces;
 using OrderFinanceControl.Dtos.Orders;
 using OrderFinanceControl.Dtos.Products;
-using OrderFinanceControl.UseCases;
+using OrderFinanceControl.UseCases.Orders;
 
 namespace OrderFinanceControl.Controllers;
 
@@ -10,17 +10,20 @@ namespace OrderFinanceControl.Controllers;
 [Route("[controller]")]
 public class OrdersController : ControllerBase
 {
+    private readonly GetOrderByIdUseCase _getOrderByIdUseCase;
     private readonly CreateOrderUseCase _createOrderUseCase;
-    private readonly IOrderRepository _orderRepository;
     private readonly MarkOrderAsPaidUseCase _markOrderAsPaidUseCase;
+    private readonly GetOrdersUseCase _getOrdersUseCase;
     public OrdersController(
         CreateOrderUseCase createOrderUseCase, 
-        IOrderRepository orderRepository,
-        MarkOrderAsPaidUseCase markOrderAsPaidUseCase)
+        MarkOrderAsPaidUseCase markOrderAsPaidUseCase,
+        GetOrderByIdUseCase getOrderByIdUseCase,
+        GetOrdersUseCase getOrdersUseCase   )
     {
         _createOrderUseCase = createOrderUseCase;
-        _orderRepository = orderRepository;
         _markOrderAsPaidUseCase = markOrderAsPaidUseCase;
+        _getOrderByIdUseCase = getOrderByIdUseCase;
+        _getOrdersUseCase = getOrdersUseCase;
     }
 
     [HttpPost]
@@ -37,7 +40,7 @@ public class OrdersController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var order = await _orderRepository.GetByIdAsync(id);
+        var order = await _getOrderByIdUseCase.ExecuteAsync(id);
 
         if (order == null)
             return NotFound();
@@ -48,7 +51,7 @@ public class OrdersController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var orders = await _orderRepository.GetAllAsync();
+        var orders = await _getOrdersUseCase.ExecuteAsync();
 
         return Ok(orders);
     }

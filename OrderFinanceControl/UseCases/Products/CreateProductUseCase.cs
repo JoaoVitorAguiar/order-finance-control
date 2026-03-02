@@ -3,7 +3,7 @@ using OrderFinanceControl.Dtos.Products;
 using OrderFinanceControl.Entities;
 using OrderFinanceControl.Exceptions;
 
-namespace OrderFinanceControl.UseCases;
+namespace OrderFinanceControl.UseCases.Products;
 
 public class CreateProductUseCase(IProductRepository productRepository)
 {

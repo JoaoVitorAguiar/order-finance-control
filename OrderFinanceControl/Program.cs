@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using OrderFinanceControl.Data;
-using OrderFinanceControl.Data.Repositories.Interfaces;
-using OrderFinanceControl.Data.Repositories.Sql;
+using OrderFinanceControl.Extensions;
 using OrderFinanceControl.Middlewares;
-using OrderFinanceControl.UseCases;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,14 +12,9 @@ builder.Services
     .AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
-builder.Services.AddScoped<ICustomerRepository, CustomerSqlRepository>();
-builder.Services.AddScoped<IProductRepository, ProductSqlRepository>();
-builder.Services.AddScoped<IOrderRepository, OrderSqlRepository>();
-
-builder.Services.AddScoped<CreateCustomerUseCase>();
-builder.Services.AddScoped<CreateProductUseCase>();
-builder.Services.AddScoped<CreateOrderUseCase>();
-builder.Services.AddScoped<MarkOrderAsPaidUseCase>();
+builder.Services
+    .AddRepositories()
+    .AddUseCases();
 
 
 builder.Services.AddDbContext<OrderFinanceControlDbContext>(options =>

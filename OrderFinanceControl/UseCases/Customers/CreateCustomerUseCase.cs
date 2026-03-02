@@ -3,7 +3,7 @@ using OrderFinanceControl.Dtos.Customers;
 using OrderFinanceControl.Entities;
 using OrderFinanceControl.Exceptions;
 
-namespace OrderFinanceControl.UseCases;
+namespace OrderFinanceControl.UseCases.Customers;
 
 public class CreateCustomerUseCase(ICustomerRepository customerRepository)
 {

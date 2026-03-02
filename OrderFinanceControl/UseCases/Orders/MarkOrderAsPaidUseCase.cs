@@ -2,7 +2,7 @@
 using OrderFinanceControl.Enums;
 using OrderFinanceControl.Exceptions;
 
-namespace OrderFinanceControl.UseCases;
+namespace OrderFinanceControl.UseCases.Orders;
 
 public class MarkOrderAsPaidUseCase
 {

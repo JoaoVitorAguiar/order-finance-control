@@ -3,7 +3,7 @@ using OrderFinanceControl.Dtos.Orders;
 using OrderFinanceControl.Entities;
 using OrderFinanceControl.Exceptions;
 
-namespace OrderFinanceControl.UseCases;
+namespace OrderFinanceControl.UseCases.Orders;
 
 public class CreateOrderUseCase
 {
