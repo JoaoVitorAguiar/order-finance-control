@@ -45,7 +45,6 @@ public class CreateOrderUseCase
         var order = new Order(dto.CustomerId, items);
 
         await _orderRepository.AddAsync(order);
-        await _orderRepository.SaveChangesAsync();
 
         return order.Id;
     }

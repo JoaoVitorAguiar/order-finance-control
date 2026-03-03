@@ -11,6 +11,7 @@ public class ProductSqlRepository(OrderFinanceControlDbContext context) : IProdu
     public async Task AddAsync(Product product)
     {
         await _context.Products.AddAsync(product);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<Product>> GetAllAsync()
@@ -34,10 +35,5 @@ public class ProductSqlRepository(OrderFinanceControlDbContext context) : IProdu
             .Products
             .AsNoTracking()
             .FirstOrDefaultAsync(p => p.Name == name);
-    }
-
-    public async Task SaveChangesAsync()
-    {
-        await _context.SaveChangesAsync();
     }
 }

@@ -12,6 +12,7 @@ public class OrderSqlRepository(OrderFinanceControlDbContext dbContext) : IOrder
     public async Task AddAsync(Order order)
     {
         await _dbContext.Orders.AddAsync(order);
+        await _dbContext.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<OrderResponseDto>> GetAllAsync()
@@ -77,8 +78,9 @@ public class OrderSqlRepository(OrderFinanceControlDbContext dbContext) : IOrder
         return _dbContext.Orders.FirstOrDefaultAsync(o => o.Id == id);
     }
 
-    public Task SaveChangesAsync()
+    public async Task UpdateAsync(Order order)
     {
-        return _dbContext.SaveChangesAsync();
+        _dbContext.Orders.Update(order);
+        await _dbContext.SaveChangesAsync();
     }
 }

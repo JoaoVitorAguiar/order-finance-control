@@ -19,6 +19,5 @@ public class CreateCustomerUseCase(ICustomerRepository customerRepository)
         var customer = new Customer(customerDto.Name, customerDto.Email);
 
         await _customerRepository.AddAsync(customer);
-        await _customerRepository.SaveChangesAsync();
     }
 }

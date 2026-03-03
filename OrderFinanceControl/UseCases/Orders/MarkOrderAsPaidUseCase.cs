@@ -26,6 +26,6 @@ public class MarkOrderAsPaidUseCase
         order.Status = OrderStatus.Paid;
         order.PaidAt = DateTime.UtcNow;
 
-        await _orderRepository.SaveChangesAsync();
+        await _orderRepository.UpdateAsync(order);
     }
 }

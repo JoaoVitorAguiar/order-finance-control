@@ -9,5 +9,5 @@ public interface IOrderRepository
     Task<OrderResponseDto?> GetByIdAsync(int id);
     Task<Order?> GetEntityByIdAsync(int id);
     Task AddAsync(Order order);
-    Task SaveChangesAsync();
+    Task UpdateAsync(Order order);
 }

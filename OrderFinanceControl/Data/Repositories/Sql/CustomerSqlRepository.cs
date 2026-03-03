@@ -11,6 +11,7 @@ public class CustomerSqlRepository(OrderFinanceControlDbContext context) : ICust
     public async Task AddAsync(Customer customer)
     {
         await _context.Customers.AddAsync(customer);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<Customer>> GetAllAsync()
@@ -35,10 +36,5 @@ public class CustomerSqlRepository(OrderFinanceControlDbContext context) : ICust
             .Customers
             .AsNoTracking()
             .FirstOrDefaultAsync(c => c.Id == id);
-    }
-
-    public async Task SaveChangesAsync()
-    {
-        await _context.SaveChangesAsync();
     }
 }
