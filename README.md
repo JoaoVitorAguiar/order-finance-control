@@ -217,6 +217,39 @@ No contexto deste projeto, optou-se por **embedding** para os pedidos, visando:
 * Modelo flexível
 
 
+## 📂 Estrutura do Projeto
+
+O projeto foi mantido intencionalmente em **um único projeto**, com organização por responsabilidade técnica.  
+O objetivo principal é comparar a modelagem e persistência entre **SQL Server e MongoDB no mesmo domínio**, evitando complexidade estrutural desnecessária.
+
+A separação lógica foi organizada da seguinte forma:
+
+
+```
+OrderFinanceControl/
+│
+├── Controllers/        → Camada de apresentação (endpoints HTTP)
+├── UseCases/           → Regras de aplicação e orquestração de operações
+├── Entities/           → Entidades de domínio
+├── Enums/              → Tipos e estados do domínio
+│
+├── Data/
+│   ├── Repositories/
+│   │   ├── Interfaces/ → Contratos de persistência
+│   │   └── Sql/        → Implementações para SQL Server
+│   └── OrderFinanceControlDbContext.cs
+│
+├── Dtos/               → Objetos de transporte organizados por feature
+├── Extensions/         → Métodos de extensão para injeção de dependências
+├── Middlewares/        → Tratamento global de exceções
+└── Migrations/         → Versionamento do banco relacional
+```
+
+A organização mantém uma separação conceitual entre apresentação, aplicação, domínio e persistência, mesmo dentro de um único projeto.
+
+Em outros contextos utilizo Clean Architecture com múltiplos projetos separados por camada.
+Neste caso, a decisão de manter tudo em um único projeto foi intencional, priorizando a clareza da comparação entre as abordagens relacional (SQL Server) e NoSQL (MongoDB) no mesmo domínio.
+
 
 ## 🧩 Aderência do Domínio ao Banco
 
