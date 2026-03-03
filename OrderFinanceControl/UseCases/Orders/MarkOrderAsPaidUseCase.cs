@@ -15,7 +15,7 @@ public class MarkOrderAsPaidUseCase
 
     public async Task ExecuteAsync(int orderId)
     {
-        var order = await _orderRepository.GetEntityByIdAsync(orderId);
+        var order = await _orderRepository.GetByIdAsync(orderId);
 
         if (order == null)
             throw new NotFoundException("Order not found.");

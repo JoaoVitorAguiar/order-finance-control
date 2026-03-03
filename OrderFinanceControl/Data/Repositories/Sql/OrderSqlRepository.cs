@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OrderFinanceControl.Data.Repositories.Interfaces;
-using OrderFinanceControl.Dtos.Customers;
-using OrderFinanceControl.Dtos.Orders;
 using OrderFinanceControl.Entities;
 
 namespace OrderFinanceControl.Data.Repositories.Sql;
@@ -15,72 +13,36 @@ public class OrderSqlRepository(OrderFinanceControlDbContext dbContext) : IOrder
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<OrderResponseDto>> GetAllAsync()
+    public async Task<IEnumerable<Order>> GetAllAsync()
     {
         return await _dbContext.Orders
-            .AsNoTracking()
-            .Select(o => new OrderResponseDto
-            {
-                Id = o.Id,
-
-                Customer = new CustomerResponseDto
-                {
-                    Id = o.Customer.Id,
-                    Name = o.Customer.Name
-                },
-
-                CreatedAt = o.CreatedAt,
-                TotalAmount = o.TotalAmount,
-                Status = o.Status.ToString(),
-
-                Items = o.Items.Select(i => new OrderItemResponseDto
-                {
-                    ProductId = i.ProductId,
-                    ProductName = i.Product.Name,
-                    Quantity = i.Quantity,
-                    UnitPriceAtOrderTime = i.UnitPriceAtOrderTime
-                }).ToList()
-            })
-            .ToListAsync();
+        .Include(o => o.Customer)
+        .Include(o => o.Items)
+            .ThenInclude(i => i.Product)
+        .AsNoTracking()
+        .ToListAsync();
     }
 
-    public async Task<OrderResponseDto?> GetByIdAsync(int id)
+    public async Task<Order?> GetByIdWithDetailsAsync(int id)
     {
         return await _dbContext.Orders
+            .Include(o => o.Customer)
+            .Include(o => o.Items)
+                .ThenInclude(i => i.Product)
             .AsNoTracking()
-            .Select(o => new OrderResponseDto
-            {
-                Id = o.Id,
-
-                Customer = new CustomerResponseDto
-                {
-                    Id = o.Customer.Id,
-                    Name = o.Customer.Name
-                },
-
-                CreatedAt = o.CreatedAt,
-                TotalAmount = o.TotalAmount,
-                Status = o.Status.ToString(),
-
-                Items = o.Items.Select(i => new OrderItemResponseDto
-                {
-                    ProductId = i.ProductId,
-                    ProductName = i.Product.Name,
-                    Quantity = i.Quantity,
-                    UnitPriceAtOrderTime = i.UnitPriceAtOrderTime
-                }).ToList()
-            })
             .FirstOrDefaultAsync(o => o.Id == id);
     }
 
-    public Task<Order?> GetEntityByIdAsync(int id)
+    public async Task<Order?> GetByIdAsync(int id)
     {
-        return _dbContext.Orders.FirstOrDefaultAsync(o => o.Id == id);
+        return await _dbContext.Orders
+            .AsNoTracking()
+            .FirstOrDefaultAsync(o => o.Id == id);
     }
-
     public async Task UpdateAsync(Order order)
     {
         _dbContext.Orders.Update(order);
         await _dbContext.SaveChangesAsync();
     }
+
 }

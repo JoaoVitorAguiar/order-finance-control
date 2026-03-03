@@ -1,4 +1,5 @@
 ﻿using OrderFinanceControl.Data.Repositories.Interfaces;
+using OrderFinanceControl.Dtos.Customers;
 using OrderFinanceControl.Dtos.Orders;
 
 namespace OrderFinanceControl.UseCases.Orders;
@@ -9,6 +10,31 @@ public class GetOrderByIdUseCase(IOrderRepository orderRepository)
 
     public async Task<OrderResponseDto?> ExecuteAsync(int id)
     {
-        return await _orderRepository.GetByIdAsync(id);
+        var order = await _orderRepository.GetByIdWithDetailsAsync(id);
+
+        if (order is null)
+            return null;
+
+        return new OrderResponseDto
+        {
+            Id = order.Id,
+            CreatedAt = order.CreatedAt,
+            TotalAmount = order.TotalAmount,
+            Status = order.Status.ToString(),
+
+            Customer = new CustomerResponseDto
+            {
+                Id = order.Customer.Id,
+                Name = order.Customer.Name
+            },
+
+            Items = order.Items.Select(i => new OrderItemResponseDto
+            {
+                ProductId = i.ProductId,
+                ProductName = i.Product.Name,
+                Quantity = i.Quantity,
+                UnitPriceAtOrderTime = i.UnitPriceAtOrderTime
+            }).ToList()
+        };
     }
 }

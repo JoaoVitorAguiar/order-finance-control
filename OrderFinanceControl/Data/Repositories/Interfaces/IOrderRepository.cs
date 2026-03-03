@@ -1,13 +1,12 @@
-﻿using OrderFinanceControl.Dtos.Orders;
-using OrderFinanceControl.Entities;
+﻿using OrderFinanceControl.Entities;
 
 namespace OrderFinanceControl.Data.Repositories.Interfaces;
 
 public interface IOrderRepository
 {
-    Task<IEnumerable<OrderResponseDto>> GetAllAsync();
-    Task<OrderResponseDto?> GetByIdAsync(int id);
-    Task<Order?> GetEntityByIdAsync(int id);
+    Task<IEnumerable<Order>> GetAllAsync();
+    Task<Order?> GetByIdAsync(int id);
+    Task<Order?> GetByIdWithDetailsAsync(int id);
     Task AddAsync(Order order);
     Task UpdateAsync(Order order);
 }
