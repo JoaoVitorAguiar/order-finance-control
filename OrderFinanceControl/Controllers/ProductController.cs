@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using OrderFinanceControl.Data.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using OrderFinanceControl.Common;
+using OrderFinanceControl.Common.Errors;
 using OrderFinanceControl.Dtos.Products;
 using OrderFinanceControl.UseCases.Products;
 
@@ -11,6 +12,7 @@ public class ProductController : ControllerBase
 {
     private readonly CreateProductUseCase _createProductUseCase;
     private readonly GetProductsUseCase _getProductsUseCase;
+
     public ProductController(CreateProductUseCase createProductUseCase, GetProductsUseCase getProductsUseCase)
     {
         _createProductUseCase = createProductUseCase;
@@ -20,8 +22,14 @@ public class ProductController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(ProductDto body)
     {
-        await _createProductUseCase.ExecuteAsync(body);
-        return Created();
+        var result = await _createProductUseCase.ExecuteAsync(body);
+
+        return result.Match<IActionResult>(
+            value => CreatedAtAction(nameof(GetAll), new { id = value.Id }, value),
+            error => error == ProductErrors.NameAlreadyExists
+                ? Conflict(new ErrorResponse(error.Code, error.Description))
+                : BadRequest(new ErrorResponse(error.Code, error.Description))
+        );
     }
 
     [HttpGet]

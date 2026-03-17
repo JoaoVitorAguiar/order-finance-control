@@ -1,4 +1,6 @@
-﻿using OrderFinanceControl.Data.Repositories.Interfaces;
+using OrderFinanceControl.Common;
+using OrderFinanceControl.Common.Errors;
+using OrderFinanceControl.Data.Repositories.Interfaces;
 using OrderFinanceControl.Dtos.Customers;
 using OrderFinanceControl.Dtos.Orders;
 
@@ -8,12 +10,12 @@ public class GetOrderByIdUseCase(IOrderRepository orderRepository)
 {
     private readonly IOrderRepository _orderRepository = orderRepository;
 
-    public async Task<OrderResponseDto?> ExecuteAsync(int id)
+    public async Task<Result<OrderResponseDto>> ExecuteAsync(int id)
     {
         var order = await _orderRepository.GetByIdWithDetailsAsync(id);
 
         if (order is null)
-            return null;
+            return OrderErrors.NotFound;
 
         return new OrderResponseDto
         {

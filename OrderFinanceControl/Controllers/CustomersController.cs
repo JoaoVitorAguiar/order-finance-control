@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using OrderFinanceControl.Data.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using OrderFinanceControl.Common;
 using OrderFinanceControl.Dtos.Customers;
-using OrderFinanceControl.Entities;
 using OrderFinanceControl.UseCases.Customers;
 
 namespace OrderFinanceControl.Controllers;
@@ -22,9 +21,12 @@ public class CustomersController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create(CustomerDto body)
     {
-        await _createCustomerUseCase.ExecuteAsync(body);
+        var result = await _createCustomerUseCase.ExecuteAsync(body);
 
-        return Created();
+        return result.Match<IActionResult>(
+            value => Ok(value),
+            error => Conflict(new ErrorResponse(error.Code, error.Description))
+        );
     }
 
     [HttpGet]

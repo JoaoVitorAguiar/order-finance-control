@@ -1,6 +1,7 @@
-﻿using OrderFinanceControl.Data.Repositories.Interfaces;
+using OrderFinanceControl.Common;
+using OrderFinanceControl.Common.Errors;
+using OrderFinanceControl.Data.Repositories.Interfaces;
 using OrderFinanceControl.Enums;
-using OrderFinanceControl.Exceptions;
 
 namespace OrderFinanceControl.UseCases.Orders;
 
@@ -13,19 +14,21 @@ public class MarkOrderAsPaidUseCase
         _orderRepository = orderRepository;
     }
 
-    public async Task ExecuteAsync(int orderId)
+    public async Task<Result<bool>> ExecuteAsync(int orderId)
     {
         var order = await _orderRepository.GetByIdAsync(orderId);
 
         if (order == null)
-            throw new NotFoundException("Order not found.");
+            return OrderErrors.NotFound;
 
         if (order.Status != OrderStatus.Created)
-            throw new ConflictException("Order cannot be paid.");
+            return OrderErrors.CannotBePaid;
 
         order.Status = OrderStatus.Paid;
         order.PaidAt = DateTime.UtcNow;
 
         await _orderRepository.UpdateAsync(order);
+
+        return true;
     }
 }

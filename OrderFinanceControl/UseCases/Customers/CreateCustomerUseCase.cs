@@ -1,4 +1,6 @@
-﻿using OrderFinanceControl.Data.Repositories.Interfaces;
+﻿using OrderFinanceControl.Common;
+using OrderFinanceControl.Common.Errors;
+using OrderFinanceControl.Data.Repositories.Interfaces;
 using OrderFinanceControl.Dtos.Customers;
 using OrderFinanceControl.Entities;
 using OrderFinanceControl.Exceptions;
@@ -8,16 +10,18 @@ namespace OrderFinanceControl.UseCases.Customers;
 public class CreateCustomerUseCase(ICustomerRepository customerRepository)
 {
     private readonly ICustomerRepository _customerRepository = customerRepository;
-    public async Task ExecuteAsync(CustomerDto customerDto)
+    public async Task<Result<Customer>> ExecuteAsync(CustomerDto customerDto)
     {
         var existingCustomer = await _customerRepository.GetByEmailAsync(customerDto.Email);
         if (existingCustomer != null)
         {
-            throw new AlreadyExistsException("A customer with the same email already exists.");
+            return CustomerErrors.EmailAlreadyExists;
         }
 
         var customer = new Customer(customerDto.Name, customerDto.Email);
 
         await _customerRepository.AddAsync(customer);
+
+        return customer;
     }
 }
