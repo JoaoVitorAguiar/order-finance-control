@@ -4,8 +4,8 @@ namespace OrderFinanceControl.Dtos.Orders;
 
 public record OrderItemResponseDto
 {
-    public int ProductId { get; set; }
-    public string ProductName { get; set; }
+    public string ProductId { get; set; } = default!;
+    public string ProductName { get; set; } = default!;
 
     public int Quantity { get; set; }
     public decimal UnitPriceAtOrderTime { get; set; }

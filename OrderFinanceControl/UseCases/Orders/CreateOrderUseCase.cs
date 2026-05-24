@@ -1,9 +1,10 @@
-﻿using OrderFinanceControl.Data.Repositories.Interfaces;
+using OrderFinanceControl.Common;
+using OrderFinanceControl.Common.Errors;
+using OrderFinanceControl.Data.Repositories.Interfaces;
 using OrderFinanceControl.Dtos.Orders;
 using OrderFinanceControl.Entities;
-using OrderFinanceControl.Exceptions;
 
-namespace OrderFinanceControl.UseCases;
+namespace OrderFinanceControl.UseCases.Orders;
 
 public class CreateOrderUseCase
 {
@@ -21,18 +22,18 @@ public class CreateOrderUseCase
         _productRepository = productRepository;
     }
 
-    public async Task<string> ExecuteAsync(OrderDto dto)
+    public async Task<Result<string>> ExecuteAsync(OrderDto dto)
     {
         var customer = await _customerRepository.GetByIdAsync(dto.CustomerId);
 
         if (customer == null)
-            throw new NotFoundException("Customer not found.");
+            return OrderErrors.CustomerNotFound;
 
         var productIds = dto.Items.Select(i => i.ProductId).Distinct();
         var products = await _productRepository.GetByIdsAsync(productIds);
 
         if (products.Count() != productIds.Count())
-            throw new NotFoundException("One or more products not found.");
+            return OrderErrors.ProductsNotFound;
 
         var productsDict = products.ToDictionary(p => p.Id);
 
