@@ -31,6 +31,7 @@ public class CreateOrderUseCaseTests
         var orderRepoMock = new Mock<IOrderRepository>();
         orderRepoMock
             .Setup(r => r.AddAsync(It.IsAny<Order>()))
+            .Callback<Order>(o => o.Id = 1)
             .Returns(Task.CompletedTask);
 
         var useCase = new CreateOrderUseCase(
