@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using OrderFinanceControl.Data.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using OrderFinanceControl.Common;
+using OrderFinanceControl.Common.Errors;
 using OrderFinanceControl.Dtos.Orders;
-using OrderFinanceControl.Dtos.Products;
-using OrderFinanceControl.UseCases;
+using OrderFinanceControl.UseCases.Orders;
 
 namespace OrderFinanceControl.Controllers;
 
@@ -10,45 +10,52 @@ namespace OrderFinanceControl.Controllers;
 [Route("[controller]")]
 public class OrdersController : ControllerBase
 {
+    private readonly GetOrderByIdUseCase _getOrderByIdUseCase;
     private readonly CreateOrderUseCase _createOrderUseCase;
-    private readonly IOrderRepository _orderRepository;
     private readonly MarkOrderAsPaidUseCase _markOrderAsPaidUseCase;
+    private readonly GetOrdersUseCase _getOrdersUseCase;
+
     public OrdersController(
-        CreateOrderUseCase createOrderUseCase, 
-        IOrderRepository orderRepository,
-        MarkOrderAsPaidUseCase markOrderAsPaidUseCase)
+        CreateOrderUseCase createOrderUseCase,
+        MarkOrderAsPaidUseCase markOrderAsPaidUseCase,
+        GetOrderByIdUseCase getOrderByIdUseCase,
+        GetOrdersUseCase getOrdersUseCase)
     {
         _createOrderUseCase = createOrderUseCase;
-        _orderRepository = orderRepository;
         _markOrderAsPaidUseCase = markOrderAsPaidUseCase;
+        _getOrderByIdUseCase = getOrderByIdUseCase;
+        _getOrdersUseCase = getOrdersUseCase;
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(OrderDto body)
     {
-        var orderId =  await _createOrderUseCase.ExecuteAsync(body);
-        return CreatedAtAction(
-        nameof(GetById),      
-        new { id = orderId },
-        new { id = orderId }  
+        var result = await _createOrderUseCase.ExecuteAsync(body);
+
+        return result.Match<IActionResult>(
+            orderId => CreatedAtAction(
+                nameof(GetById),
+                new { id = orderId },
+                new { id = orderId }),
+            error => NotFound(new ErrorResponse(error.Code, error.Description))
         );
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(string id)
     {
-        var order = await _orderRepository.GetByIdAsync(id);
+        var result = await _getOrderByIdUseCase.ExecuteAsync(id);
 
-        if (order == null)
-            return NotFound();
-
-        return Ok(order);
+        return result.Match<IActionResult>(
+            value => Ok(value),
+            error => NotFound(new ErrorResponse(error.Code, error.Description))
+        );
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var orders = await _orderRepository.GetAllAsync();
+        var orders = await _getOrdersUseCase.ExecuteAsync();
 
         return Ok(orders);
     }
@@ -56,7 +63,13 @@ public class OrdersController : ControllerBase
     [HttpPatch("{id}/pay")]
     public async Task<IActionResult> MarkAsPaid(string id)
     {
-        await _markOrderAsPaidUseCase.ExecuteAsync(id);
-        return NoContent();
+        var result = await _markOrderAsPaidUseCase.ExecuteAsync(id);
+
+        return result.Match<IActionResult>(
+            _ => NoContent(),
+            error => error == OrderErrors.NotFound
+                ? NotFound(new ErrorResponse(error.Code, error.Description))
+                : Conflict(new ErrorResponse(error.Code, error.Description))
+        );
     }
 }

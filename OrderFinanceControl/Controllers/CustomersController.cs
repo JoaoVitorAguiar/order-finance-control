@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using OrderFinanceControl.Data.Repositories.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using OrderFinanceControl.Common;
 using OrderFinanceControl.Dtos.Customers;
-using OrderFinanceControl.Entities;
-using OrderFinanceControl.UseCases;
+using OrderFinanceControl.UseCases.Customers;
 
 namespace OrderFinanceControl.Controllers;
 
@@ -10,27 +9,30 @@ namespace OrderFinanceControl.Controllers;
 [Route("[controller]")]
 public class CustomersController : ControllerBase
 {
-    private readonly ICustomerRepository _customerRepository;
     private readonly CreateCustomerUseCase _createCustomerUseCase;
+    private readonly GetCustomersUseCase _getCustomersUseCases;
 
-    public CustomersController(ICustomerRepository customerRepository, CreateCustomerUseCase createCustomerUseCase)
+    public CustomersController(CreateCustomerUseCase createCustomerUseCase, GetCustomersUseCase getCustomersUseCases)
     {
         _createCustomerUseCase = createCustomerUseCase;
-        _customerRepository = customerRepository;
+        _getCustomersUseCases = getCustomersUseCases;
     }
 
     [HttpPost]
     public async Task<IActionResult> Create(CustomerDto body)
     {
-        await _createCustomerUseCase.ExecuteAsync(body);
+        var result = await _createCustomerUseCase.ExecuteAsync(body);
 
-        return Created();
+        return result.Match<IActionResult>(
+            value => Ok(value),
+            error => Conflict(new ErrorResponse(error.Code, error.Description))
+        );
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var customers = await _customerRepository.GetAllAsync();
+        var customers = await _getCustomersUseCases.ExecuteAsync();
         return Ok(customers);
     }
 }

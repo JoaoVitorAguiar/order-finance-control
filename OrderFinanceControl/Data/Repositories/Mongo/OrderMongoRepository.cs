@@ -22,6 +22,11 @@ public class OrderMongoRepository(MongoContext mongoContext) : IOrderRepository
             .FirstOrDefaultAsync();
     }
 
+    public Task<Order?> GetByIdWithDetailsAsync(string id)
+    {
+        return GetByIdAsync(id);
+    }
+
     public async Task AddAsync(Order order)
     {
         await _mongoContext.Orders.InsertOneAsync(order);

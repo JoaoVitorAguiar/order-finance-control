@@ -4,6 +4,6 @@ namespace OrderFinanceControl.Dtos.Customers;
 
 public record CustomerResponseDto
 {
-    public int Id { get; set; }
+    public string Id { get; set; } = default!;
     public required string Name { get; set; }
 }
