@@ -11,5 +11,4 @@ public class GetCustomersUseCase(ICustomerRepository customerRepository)
     {
         return await _customerRepository.GetAllAsync();
     }
-
 }
