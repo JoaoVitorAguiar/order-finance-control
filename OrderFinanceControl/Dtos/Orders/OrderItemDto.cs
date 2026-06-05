@@ -5,6 +5,7 @@ namespace OrderFinanceControl.Dtos.Orders;
 public record OrderItemDto
 {
     [Required]
+    [Range(1, int.MaxValue, ErrorMessage = "ProductId must be greater than 0.")]
     public int ProductId { get; set; }
 
     [Required]
