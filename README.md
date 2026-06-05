@@ -32,6 +32,16 @@ As migrations do EF Core continuam sendo aplicadas manualmente:
 dotnet ef database update --project OrderFinanceControl
 ```
 
+## 🧪 Testes de Integração com SQL Server
+
+Os testes de integração usam um SQL Server descartável via Testcontainers para validar endpoints e persistência real sem depender da instância local `SQLEXPRESS`.
+
+```bash
+dotnet test
+```
+
+O fluxo de teste sobe o container, aplica as migrations do EF Core e executa cenários reais de criação e consulta de clientes, produtos e pedidos.
+
 
 ## 🔵 SQL Server
 
