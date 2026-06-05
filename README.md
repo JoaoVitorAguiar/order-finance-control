@@ -294,6 +294,6 @@ Assim, o MongoDB permite maior proximidade com o modelo orientado a objetos, enq
 - [x] Ajustar a explicação da query SQL para deixar claro que ela é uma representação simplificada do SQL gerado pelo EF Core.
 - [x] Documentar melhor a decisão da estrutura de pastas e quando faria sentido separar em múltiplos projetos.
 - [x] Revisar a estratégia de validação e deixar explícito o uso de Data Annotations nos DTOs e Fluent API no mapeamento do banco.
-- [ ] Adicionar testes de integração para validar endpoints e persistência real.
+- [x] Adicionar testes de integração para validar endpoints e persistência real.
 
 
